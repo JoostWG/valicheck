@@ -50,7 +50,6 @@ export class Validator {
         return (value, path) => {
             for (const x of literals) {
                 if (x === value) {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                     return value;
                 }
             }
@@ -63,7 +62,6 @@ export class Validator {
         return (value, path) => {
             for (const validate of validators) {
                 try {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                     return validate(value, path) as ValidatorType<T>;
                 } catch (error) {
                     if (!(error instanceof ValidationError)) {

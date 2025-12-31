@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type { ValidatorFunc } from '../types';
 import { ValidationError } from '../ValidationError';
 import { Validator } from '../Validator';

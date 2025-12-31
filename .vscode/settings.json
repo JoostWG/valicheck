@@ -1,3 +1,32 @@
 {
-  "cSpell.words": ["eslintcache", "Joost", "valicheck"]
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "files.eol": "\n",
+    "editor.defaultFormatter": "dprint.dprint",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.removeUnusedImports": "explicit"
+    },
+    "eslint.format.enable": false,
+    "[jsonc]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "dprint.dprint",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit",
+            "source.removeUnusedImports": "explicit"
+        },
+        "editor.rulers": [100]
+    },
+    "files.readonlyInclude": {
+        "node_modules/**": true,
+        "dist/**": true,
+        "package-lock.json": true,
+        "tsconfig.tsbuildinfo": true,
+        ".eslintcache": true,
+        "docs-build/**": true
+    },
+    "cSpell.words": ["eslintcache", "Joost", "valicheck"]
 }

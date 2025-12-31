@@ -1,6 +1,5 @@
 {
     "name": "valicheck",
-    "type": "module",
     "main": "dist/index.js",
     "repository": {
         "type": "git",

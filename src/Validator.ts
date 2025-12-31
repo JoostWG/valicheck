@@ -73,4 +73,9 @@ export class Validator {
             throw new ValidationError(`[${path}] did not match any of the given be a boolean`);
         };
     }
+
+    public unknown(): ValidatorFunc {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        return (value, path) => value;
+    }
 }

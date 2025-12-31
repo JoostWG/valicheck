@@ -15,4 +15,24 @@ export class Validator {
             return value;
         };
     }
+
+    public boolean(
+        options?: { convertToTrue?: unknown[]; convertToFalse?: unknown[] },
+    ): ValidatorFunc<boolean> {
+        return (value, path) => {
+            if (typeof value === 'boolean') {
+                return value;
+            }
+
+            if (options?.convertToTrue?.includes(value)) {
+                return true;
+            }
+
+            if (options?.convertToFalse?.includes(value)) {
+                return false;
+            }
+
+            throw new ValidationError(`[${path}] should be a boolean`);
+        };
+    }
 }

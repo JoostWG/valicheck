@@ -8,7 +8,8 @@
         "moduleResolution": "NodeNext",
         "strict": true,
         "esModuleInterop": true,
-        "skipLibCheck": false
+        "skipLibCheck": false,
+        "isolatedModules": true
     },
     "include": ["src"]
 }

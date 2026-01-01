@@ -100,6 +100,15 @@ export class Validator {
         };
     }
 
+    public enum<const T extends Record<string, string | number>>(
+        enumClass: T,
+    ): ValidatorFunc<Exclude<T[keyof T], keyof T>> {
+        const values = Object.values(enumClass)
+            .filter((value) => typeof value !== 'string' || !(value in enumClass));
+
+        return this.literal(...values as Exclude<T[keyof T], keyof T>[]);
+    }
+
     public nullable<T>(validator: ValidatorFunc<T>): ValidatorFunc<T | null> {
         return (value, path) => {
             if (value === null) {

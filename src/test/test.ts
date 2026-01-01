@@ -150,6 +150,60 @@ describe('Literal', () => {
     });
 });
 
+describe('Enum', () => {
+    const validateUsingObject = validator.enum({ test: 1, cool: 2 });
+
+    test('Valid using object', () => {
+        expectValid(validateUsingObject, 1);
+        expectValid(validateUsingObject, 2);
+    });
+
+    test('Invalid using enum', () => {
+        expectInvalid(validateUsingObject, 3);
+        expectInvalid(validateUsingObject, 'test');
+        expectInvalid(validateUsingObject, 'cool');
+    });
+
+    enum TestNumberEnum {
+        Test = 1,
+        Cool = 2,
+    }
+
+    const validateUsingNumberEnum = validator.enum(TestNumberEnum);
+
+    test('Valid using number enum', () => {
+        expectValid(validateUsingNumberEnum, 1);
+        expectValid(validateUsingNumberEnum, 2);
+    });
+
+    test('Invalid using number enum', () => {
+        expectInvalid(validateUsingNumberEnum, 3);
+        expectInvalid(validateUsingNumberEnum, '1');
+        expectInvalid(validateUsingNumberEnum, '2');
+        expectInvalid(validateUsingNumberEnum, 'Test');
+        expectInvalid(validateUsingNumberEnum, 'Cool');
+    });
+
+    enum TestStringEnum {
+        Test = '1',
+        Cool = '2',
+    }
+
+    const validateUsingStringEnum = validator.enum(TestStringEnum);
+
+    test('Valid using number enum', () => {
+        expectValid(validateUsingStringEnum, '1');
+        expectValid(validateUsingStringEnum, '2');
+    });
+
+    test('Invalid using number enum', () => {
+        expectInvalid(validateUsingStringEnum, 1);
+        expectInvalid(validateUsingStringEnum, 2);
+        expectInvalid(validateUsingStringEnum, 'Test');
+        expectInvalid(validateUsingStringEnum, 'Cool');
+    });
+});
+
 describe('Nullable', () => {
     const validate = validator.nullable(validator.string());
 

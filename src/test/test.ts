@@ -149,3 +149,18 @@ describe('Literal', () => {
         expectInvalid(validate, []);
     });
 });
+
+describe('Unknown', () => {
+    const validate = validator.unknown();
+
+    test('Valid', () => {
+        expectValid(validate, 'test');
+        expectValid(validate, 2);
+        expectValid(validate, null);
+        expectValid(validate, []);
+    });
+
+    test('Invalid', () => {
+        expectInvalid(validate, undefined);
+    });
+});

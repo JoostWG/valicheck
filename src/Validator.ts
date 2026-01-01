@@ -101,6 +101,12 @@ export class Validator {
     }
 
     public unknown(): ValidatorFunc {
-        return (value) => value;
+        return (value, path) => {
+            if (value === undefined) {
+                throw new ValidationError(`[${path}] cannot be undefined`);
+            }
+
+            return value;
+        };
     }
 }

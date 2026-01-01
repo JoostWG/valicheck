@@ -101,7 +101,7 @@ export class Validator {
             }
 
             throw new ValidationError(
-                `[${path}] must be one of [${literals.toString()}], got ${String(value)}`,
+                `[${path}] must be one of [${literals.toString()}], got ${JSON.stringify(value)}`,
             );
         };
     }
@@ -118,7 +118,7 @@ export class Validator {
                 }
             }
 
-            throw new ValidationError(`[${path}] did not match any of the given be a boolean`);
+            throw new ValidationError(`[${path}] did not match any of the given validators`);
         };
     }
 

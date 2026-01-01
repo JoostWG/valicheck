@@ -164,6 +164,20 @@ describe('Nullable', () => {
     });
 });
 
+describe('Optional', () => {
+    const validate = validator.optional(validator.string());
+
+    test('Valid', () => {
+        expectValid(validate, 'test');
+        expectValid(validate, undefined);
+    });
+
+    test('Invalid', () => {
+        expectInvalid(validate, null);
+        expectInvalid(validate, 1);
+    });
+});
+
 describe('Unknown', () => {
     const validate = validator.unknown();
 

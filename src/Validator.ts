@@ -110,6 +110,16 @@ export class Validator {
         };
     }
 
+    public optional<T>(validator: ValidatorFunc<T>): ValidatorFunc<T | undefined> {
+        return (value, path) => {
+            if (value === undefined) {
+                return undefined;
+            }
+
+            return validator(value, path);
+        };
+    }
+
     public unknown(): ValidatorFunc {
         return (value, path) => {
             if (value === undefined) {

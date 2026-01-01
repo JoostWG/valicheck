@@ -100,6 +100,16 @@ export class Validator {
         };
     }
 
+    public nullable<T>(validator: ValidatorFunc<T>): ValidatorFunc<T | null> {
+        return (value, path) => {
+            if (value === null) {
+                return null;
+            }
+
+            return validator(value, path);
+        };
+    }
+
     public unknown(): ValidatorFunc {
         return (value, path) => {
             if (value === undefined) {

@@ -150,6 +150,20 @@ describe('Literal', () => {
     });
 });
 
+describe('Nullable', () => {
+    const validate = validator.nullable(validator.string());
+
+    test('Valid', () => {
+        expectValid(validate, 'test');
+        expectValid(validate, null);
+    });
+
+    test('Invalid', () => {
+        expectInvalid(validate, undefined);
+        expectInvalid(validate, 1);
+    });
+});
+
 describe('Unknown', () => {
     const validate = validator.unknown();
 

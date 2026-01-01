@@ -107,6 +107,28 @@ describe('Array', () => {
     });
 });
 
+describe('Object', () => {
+    const validate = validator.object({
+        foo: validator.optional(validator.string()),
+        bar: validator.nullable(validator.number()),
+    });
+
+    test('Valid', () => {
+        expectValid(validate, { foo: '', bar: 1 });
+        expectValid(validate, { bar: 1 });
+        expectValid(validate, { foo: '', bar: null });
+        expectValid(validate, { bar: null });
+    });
+
+    test('Invalid', () => {
+        expectInvalid(validate, { foo: '', bar: 'test' });
+        expectInvalid(validate, { foo: '' });
+        expectInvalid(validate, { foo: null, bar: null });
+        expectInvalid(validate, 1);
+        expectInvalid(validate, ['', null]);
+    });
+});
+
 describe('Tuple', () => {
     const validate = validator.tuple([validator.string(), validator.literal(1, 2, 3)]);
 

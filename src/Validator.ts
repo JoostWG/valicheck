@@ -1,4 +1,4 @@
-import type { ShapeType, ValidatorFunc, ValidatorType } from './types';
+import type { ObjectShape, ShapeType, ValidatorFunc, ValidatorType } from './types';
 import { ValidationError } from './ValidationError';
 
 export class Validator {
@@ -53,6 +53,26 @@ export class Validator {
             }
 
             return value.map((item, index) => validator(item, `${path}[${index}]`));
+        };
+    }
+
+    public object<T extends Record<string, unknown>>(shape: ObjectShape<T>): ValidatorFunc<T> {
+        return (value, path) => {
+            if (typeof value !== 'object' || !value || Array.isArray(value)) {
+                throw new ValidationError(`[${path}] should be an object`);
+            }
+
+            const result: Record<string, unknown> = {};
+
+            for (const [key, validator] of Object.entries(shape)) {
+                result[key] = validator(
+                    // @ts-expect-error Not something for now
+                    value[key],
+                    `${path}.${key}`,
+                );
+            }
+
+            return result as T;
         };
     }
 

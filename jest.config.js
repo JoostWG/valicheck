@@ -2,5 +2,6 @@
 export default {
     preset: 'ts-jest',
     testEnvironment: 'node',
-    testMatch: ['**/test/**/*.ts'],
+    testMatch: ['**/test/**/*.test.ts'],
+    verbose: true,
 };

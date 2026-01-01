@@ -1,22 +1,5 @@
-import type { ValidatorFunc } from '../types';
-import { ValidationError } from '../ValidationError';
 import { Validator } from '../Validator';
-
-function expectValid(validate: ValidatorFunc, value: unknown, toBe?: unknown): void {
-    const expected = toBe ?? value;
-    const testCase = expect(validate(value, 'root'));
-
-    if (typeof expected === 'object' && expected !== null) {
-        testCase.toMatchObject(expected);
-        return;
-    }
-
-    testCase.toBe(expected);
-}
-
-function expectInvalid(validate: ValidatorFunc, value: unknown): void {
-    expect(() => validate(value, 'root')).toThrow(ValidationError);
-}
+import { expectInvalid, expectValid } from './helpers';
 
 const validator = new Validator();
 

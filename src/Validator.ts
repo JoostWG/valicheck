@@ -100,7 +100,9 @@ export class Validator {
                 }
             }
 
-            throw new ValidationError(`[${path}] is not exact match`);
+            throw new ValidationError(
+                `[${path}] must be one of [${literals.toString()}], got ${String(value)}`,
+            );
         };
     }
 

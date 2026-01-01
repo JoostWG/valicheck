@@ -13,6 +13,6 @@ export function expectValid(validate: ValidatorFunc, value: unknown, toBe?: unkn
     testCase.toBe(expected);
 }
 
-export function expectInvalid(validate: ValidatorFunc, value: unknown): void {
-    expect(() => validate(value, 'root')).toThrow(ValidationError);
+export function expectInvalid(validate: ValidatorFunc, value: unknown, message: string): void {
+    expect(() => validate(value, 'root')).toThrow(new ValidationError(message));
 }

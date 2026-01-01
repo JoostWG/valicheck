@@ -7,11 +7,11 @@ describe('String', () => {
     const validate = validator.string();
 
     test('Valid', () => {
-        expectValid(validate, '');
+        expectValid(validate, 'sa');
     });
 
     test('Invalid', () => {
-        expectInvalid(validate, 2);
+        expectInvalid(validate, 2, '[root] should be a string');
     });
 
     const validateWithPattern = validator.string({ pattern: /^\d{4}$/u });
@@ -21,7 +21,7 @@ describe('String', () => {
     });
 
     test('Valid pattern', () => {
-        expectInvalid(validateWithPattern, '12345');
+        expectInvalid(validateWithPattern, '12345', "[root] doesn't match the pattern");
     });
 });
 
@@ -36,8 +36,8 @@ describe('Number', () => {
     });
 
     test('Invalid', () => {
-        expectInvalid(validate, true);
-        expectInvalid(validate, 'test');
+        expectInvalid(validate, true, '[root] should be a number');
+        expectInvalid(validate, 'test', '[root] should be a number');
     });
 });
 
@@ -50,8 +50,8 @@ describe('Boolean', () => {
     });
 
     test('Invalid', () => {
-        expectInvalid(validate, 'true');
-        expectInvalid(validate, 0);
+        expectInvalid(validate, 'true', '[root] should be a boolean');
+        expectInvalid(validate, 0, '[root] should be a boolean');
     });
 
     const validateWithConvert = validator.boolean({
@@ -70,10 +70,10 @@ describe('Boolean', () => {
     });
 
     test('Invalid convert', () => {
-        expectInvalid(validateWithConvert, 'true');
-        expectInvalid(validateWithConvert, 'false');
-        expectInvalid(validateWithConvert, 2);
-        expectInvalid(validateWithConvert, []);
+        expectInvalid(validateWithConvert, 'true', '[root] should be a boolean');
+        expectInvalid(validateWithConvert, 'false', '[root] should be a boolean');
+        expectInvalid(validateWithConvert, 2, '[root] should be a boolean');
+        expectInvalid(validateWithConvert, [], '[root] should be a boolean');
     });
 });
 
@@ -86,7 +86,7 @@ describe('Array', () => {
     });
 
     test('Valid', () => {
-        expectInvalid(validate, ['a', 'b', 3]);
+        expectInvalid(validate, ['a', 'b', 3], '[root[2]] should be a string');
     });
 });
 
@@ -104,11 +104,11 @@ describe('Object', () => {
     });
 
     test('Invalid', () => {
-        expectInvalid(validate, { foo: '', bar: 'test' });
-        expectInvalid(validate, { foo: '' });
-        expectInvalid(validate, { foo: null, bar: null });
-        expectInvalid(validate, 1);
-        expectInvalid(validate, ['', null]);
+        expectInvalid(validate, { foo: '', bar: 'test' }, '[root.bar] should be a number');
+        expectInvalid(validate, { foo: '' }, '[root.bar] should be a number');
+        expectInvalid(validate, { foo: null, bar: null }, '[root.foo] should be a string');
+        expectInvalid(validate, 1, '[root] should be an object');
+        expectInvalid(validate, ['', null], '[root] should be an object');
     });
 });
 
@@ -121,8 +121,8 @@ describe('Tuple', () => {
     });
 
     test('Invalid', () => {
-        expectInvalid(validate, [1, 'test']);
-        expectInvalid(validate, ['test']);
+        expectInvalid(validate, [1, 'test'], '[root[0]] should be a string');
+        expectInvalid(validate, ['test'], '[root] should have a length of 2');
     });
 });
 
@@ -130,13 +130,13 @@ describe('Any of', () => {
     const validate = validator.anyOf([validator.string(), validator.boolean()]);
 
     test('Valid', () => {
-        expectValid(validate, '');
+        expectValid(validate, 'sa');
         expectValid(validate, true);
     });
 
     test('Invalid', () => {
-        expectInvalid(validate, 1);
-        expectInvalid(validate, []);
+        expectInvalid(validate, 1, '[root] did not match any of the given validators');
+        expectInvalid(validate, [], '[root] did not match any of the given validators');
     });
 });
 
@@ -150,8 +150,8 @@ describe('Literal', () => {
     });
 
     test('Invalid', () => {
-        expectInvalid(validate, 3);
-        expectInvalid(validate, []);
+        expectInvalid(validate, 3, '[root] must be one of [test,1,2], got 3');
+        expectInvalid(validate, [], '[root] must be one of [test,1,2], got []');
     });
 });
 
@@ -164,9 +164,9 @@ describe('Enum', () => {
     });
 
     test('Invalid using enum', () => {
-        expectInvalid(validateUsingObject, 3);
-        expectInvalid(validateUsingObject, 'test');
-        expectInvalid(validateUsingObject, 'cool');
+        expectInvalid(validateUsingObject, 3, '[root] must be one of [1,2], got 3');
+        expectInvalid(validateUsingObject, 'test', '[root] must be one of [1,2], got "test"');
+        expectInvalid(validateUsingObject, 'cool', '[root] must be one of [1,2], got "cool"');
     });
 
     enum TestNumberEnum {
@@ -182,11 +182,11 @@ describe('Enum', () => {
     });
 
     test('Invalid using number enum', () => {
-        expectInvalid(validateUsingNumberEnum, 3);
-        expectInvalid(validateUsingNumberEnum, '1');
-        expectInvalid(validateUsingNumberEnum, '2');
-        expectInvalid(validateUsingNumberEnum, 'Test');
-        expectInvalid(validateUsingNumberEnum, 'Cool');
+        expectInvalid(validateUsingNumberEnum, 3, '[root] must be one of [1,2], got 3');
+        expectInvalid(validateUsingNumberEnum, '1', '[root] must be one of [1,2], got "1"');
+        expectInvalid(validateUsingNumberEnum, '2', '[root] must be one of [1,2], got "2"');
+        expectInvalid(validateUsingNumberEnum, 'Test', '[root] must be one of [1,2], got "Test"');
+        expectInvalid(validateUsingNumberEnum, 'Cool', '[root] must be one of [1,2], got "Cool"');
     });
 
     enum TestStringEnum {
@@ -196,16 +196,16 @@ describe('Enum', () => {
 
     const validateUsingStringEnum = validator.enum(TestStringEnum);
 
-    test('Valid using number enum', () => {
+    test('Valid using string enum', () => {
         expectValid(validateUsingStringEnum, '1');
         expectValid(validateUsingStringEnum, '2');
     });
 
-    test('Invalid using number enum', () => {
-        expectInvalid(validateUsingStringEnum, 1);
-        expectInvalid(validateUsingStringEnum, 2);
-        expectInvalid(validateUsingStringEnum, 'Test');
-        expectInvalid(validateUsingStringEnum, 'Cool');
+    test('Invalid using string enum', () => {
+        expectInvalid(validateUsingStringEnum, 1, '[root] must be one of [1,2], got 1');
+        expectInvalid(validateUsingStringEnum, 2, '[root] must be one of [1,2], got 2');
+        expectInvalid(validateUsingStringEnum, 'Test', '[root] must be one of [1,2], got "Test"');
+        expectInvalid(validateUsingStringEnum, 'Cool', '[root] must be one of [1,2], got "Cool"');
     });
 });
 
@@ -218,8 +218,8 @@ describe('Nullable', () => {
     });
 
     test('Invalid', () => {
-        expectInvalid(validate, undefined);
-        expectInvalid(validate, 1);
+        expectInvalid(validate, undefined, '[root] should be a string');
+        expectInvalid(validate, 1, '[root] should be a string');
     });
 });
 
@@ -232,8 +232,8 @@ describe('Optional', () => {
     });
 
     test('Invalid', () => {
-        expectInvalid(validate, null);
-        expectInvalid(validate, 1);
+        expectInvalid(validate, null, '[root] should be a string');
+        expectInvalid(validate, 1, '[root] should be a string');
     });
 });
 
@@ -248,6 +248,6 @@ describe('Unknown', () => {
     });
 
     test('Invalid', () => {
-        expectInvalid(validate, undefined);
+        expectInvalid(validate, undefined, '[root] cannot be undefined');
     });
 });

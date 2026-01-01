@@ -40,7 +40,7 @@ describe('Complex 1', () => {
                 type: 'git',
                 url: 'whatever',
             },
-        });
+        }, "[root.version] doesn't match the pattern");
 
         expectInvalid(validate, {
             name: 'package-name',
@@ -48,6 +48,6 @@ describe('Complex 1', () => {
                 type: 'nope',
                 url: 'whatever',
             },
-        });
+        }, '[root.repository.type] must be one of [git], got "nope"');
     });
 });

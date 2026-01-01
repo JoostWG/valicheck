@@ -85,7 +85,6 @@ export class Validator {
     }
 
     public unknown(): ValidatorFunc {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        return (value, path) => value;
+        return (value) => value;
     }
 }

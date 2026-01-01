@@ -1,4 +1,4 @@
-import type { ValidatorFunc, ValidatorType } from './types';
+import type { ShapeType, ValidatorFunc, ValidatorType } from './types';
 import { ValidationError } from './ValidationError';
 
 export class Validator {
@@ -53,6 +53,22 @@ export class Validator {
             }
 
             return value.map((item, index) => validator(item, `${path}[${index}]`));
+        };
+    }
+
+    public tuple<const T extends ValidatorFunc[]>(shape: T): ValidatorFunc<ShapeType<T>> {
+        return (value, path): ShapeType<T> => {
+            if (!Array.isArray(value)) {
+                throw new ValidationError(`[${path}] should be an array`);
+            }
+
+            if (value.length !== shape.length) {
+                throw new ValidationError(`[${path}] should have a length of ${shape.length}`);
+            }
+
+            return value.map((item, index) => shape[index](item, `${path}[${index}]`)) as ShapeType<
+                T
+            >;
         };
     }
 

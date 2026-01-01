@@ -107,6 +107,20 @@ describe('Array', () => {
     });
 });
 
+describe('Tuple', () => {
+    const validate = validator.tuple([validator.string(), validator.literal(1, 2, 3)]);
+
+    test('Valid', () => {
+        expectValid(validate, ['test', 1]);
+        expectValid(validate, ['', 2]);
+    });
+
+    test('Invalid', () => {
+        expectInvalid(validate, [1, 'test']);
+        expectInvalid(validate, ['test']);
+    });
+});
+
 describe('Any of', () => {
     const validate = validator.anyOf([validator.string(), validator.boolean()]);
 

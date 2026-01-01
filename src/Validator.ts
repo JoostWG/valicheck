@@ -46,6 +46,16 @@ export class Validator {
         };
     }
 
+    public array<T>(validator: ValidatorFunc<T>): ValidatorFunc<T[]> {
+        return (value, path) => {
+            if (!Array.isArray(value)) {
+                throw new ValidationError(`[${path}] should be an array`);
+            }
+
+            return value.map((item, index) => validator(item, `${path}[${index}]`));
+        };
+    }
+
     public literal<const T extends unknown[]>(...literals: T): ValidatorFunc<T[number]> {
         return (value, path) => {
             for (const x of literals) {

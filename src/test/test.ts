@@ -3,7 +3,15 @@ import { ValidationError } from '../ValidationError';
 import { Validator } from '../Validator';
 
 function expectValid(validate: ValidatorFunc, value: unknown, toBe?: unknown): void {
-    expect(validate(value, 'root')).toBe(toBe ?? value);
+    const expected = toBe ?? value;
+    const testCase = expect(validate(value, 'root'));
+
+    if (typeof expected === 'object' && expected !== null) {
+        testCase.toMatchObject(expected);
+        return;
+    }
+
+    testCase.toBe(expected);
 }
 
 function expectInvalid(validate: ValidatorFunc, value: unknown): void {
@@ -83,6 +91,19 @@ describe('Boolean', () => {
         expectInvalid(validateWithConvert, 'false');
         expectInvalid(validateWithConvert, 2);
         expectInvalid(validateWithConvert, []);
+    });
+});
+
+describe('Array', () => {
+    const validate = validator.array(validator.string());
+
+    test('Valid', () => {
+        expectValid(validate, ['a', 'b', 'c']);
+        expectValid(validate, []);
+    });
+
+    test('Valid', () => {
+        expectInvalid(validate, ['a', 'b', 3]);
     });
 });
 

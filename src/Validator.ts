@@ -63,13 +63,26 @@ export class Validator {
             }
 
             const result: Record<string, unknown> = {};
+            const errors: ValidationError[] = [];
 
             for (const [key, validator] of Object.entries(shape)) {
-                result[key] = validator(
-                    // @ts-expect-error Not something for now
-                    value[key],
-                    `${path}.${key}`,
-                );
+                try {
+                    result[key] = validator(
+                        // @ts-expect-error Not something for now
+                        value[key],
+                        `${path}.${key}`,
+                    );
+                } catch (error) {
+                    if (!(error instanceof ValidationError)) {
+                        throw error;
+                    }
+
+                    errors.push(error);
+                }
+            }
+
+            if (errors.length > 0) {
+                throw new ValidationError(errors.map((error) => error.message).join('\n'));
             }
 
             return result as T;

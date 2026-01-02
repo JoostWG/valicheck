@@ -42,12 +42,22 @@ describe('Complex 1', () => {
             },
         }, "[root.version] doesn't match the pattern");
 
-        expectInvalid(validate, {
-            name: 'package-name',
-            repository: {
-                type: 'nope',
-                url: 'whatever',
+        expectInvalid(
+            validate,
+            {
+                name: [],
+                version: {},
+                repository: {
+                    type: 'nope',
+                    url: 23,
+                },
             },
-        }, '[root.repository.type] must be one of [git], got "nope"');
+            [
+                '[root.name] should be a string',
+                '[root.version] should be a string',
+                '[root.repository.type] must be one of [git], got "nope"',
+                '[root.repository.url] should be a string',
+            ].join('\n'),
+        );
     });
 });

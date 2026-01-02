@@ -22,7 +22,9 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: |
+          npm run build
+          rm -rf dist/test
 
       - name: Configure git
         run: |

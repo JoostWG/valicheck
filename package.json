@@ -24,7 +24,7 @@
     },
     "scripts": {
         "test": "jest",
-        "build": "tsup ./src --dts --clean --minify --minify-whitespace --minify-identifiers --minify-syntax && rm -rf dist/test",
+        "build": "tsup ./src --dts --clean --minify --minify-whitespace --minify-identifiers --minify-syntax",
         "lint": "eslint . --fix --cache",
         "format": "dprint fmt",
         "type-check": "tsc --noEmit",

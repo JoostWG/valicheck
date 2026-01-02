@@ -37,7 +37,15 @@ describe('Number', () => {
 
     test('Invalid', () => {
         expectInvalid(validate, true, '[root] should be a number');
+        expectInvalid(validate, NaN, '[root] should be a number');
         expectInvalid(validate, 'test', '[root] should be a number');
+    });
+
+    const validateWithNaN = validator.number({ allowNaN: true });
+
+    test('Valid NaN', () => {
+        expectValid(validateWithNaN, 1);
+        expectValid(validateWithNaN, NaN);
     });
 });
 

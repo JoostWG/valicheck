@@ -16,9 +16,9 @@ export class Validator {
         };
     }
 
-    public number(): ValidatorFunc<number> {
+    public number(options?: { allowNaN: boolean }): ValidatorFunc<number> {
         return (value, path) => {
-            if (typeof value !== 'number') {
+            if (typeof value !== 'number' || !options?.allowNaN && Number.isNaN(value)) {
                 throw new ValidationError(`[${path}] should be a number`);
             }
 

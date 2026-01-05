@@ -1,4 +1,10 @@
-import type { ObjectShape, ShapeType, ValidatorFunc, ValidatorType } from './types';
+import type {
+    ObjectShape,
+    ObjectValidatorFunc,
+    ShapeType,
+    ValidatorFunc,
+    ValidatorType,
+} from './types';
 import { ValidationError } from './ValidationError';
 
 export class Validator {
@@ -56,8 +62,10 @@ export class Validator {
         };
     }
 
-    public object<T extends Record<string, unknown>>(shape: ObjectShape<T>): ValidatorFunc<T> {
-        return (value, path) => {
+    public object<T extends Record<string, unknown>>(
+        shape: ObjectShape<T>,
+    ): ObjectValidatorFunc<T> {
+        function validate(value: unknown, path: string): T {
             if (typeof value !== 'object' || !value || Array.isArray(value)) {
                 throw new ValidationError(`[${path}] should be an object`);
             }
@@ -86,7 +94,11 @@ export class Validator {
             }
 
             return result as T;
-        };
+        }
+
+        validate.shape = shape;
+
+        return validate;
     }
 
     public tuple<const T extends ValidatorFunc[]>(shape: T): ValidatorFunc<ShapeType<T>> {
@@ -161,6 +173,13 @@ export class Validator {
 
             throw new ValidationError(`[${path}] did not match any of the given validators`);
         };
+    }
+
+    public intersect<T1 extends Record<string, unknown>, T2 extends Record<string, unknown>>(
+        first: { shape: ObjectShape<T1> },
+        second: { shape: ObjectShape<T2> },
+    ): ObjectValidatorFunc<T1 & T2> {
+        return this.object({ ...first.shape, ...second.shape } as ObjectShape<T1 & T2>);
     }
 
     public enum<const T extends Record<string, string | number>>(

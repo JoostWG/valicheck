@@ -7,3 +7,7 @@ export type ObjectShape<T extends Record<string, unknown>> = {
 };
 
 export type ShapeType<T extends ValidatorFunc[]> = { [K in keyof T]: ValidatorType<T[K]> };
+
+export type ObjectValidatorFunc<T extends Record<string, unknown>> = ValidatorFunc<T> & {
+    shape: ObjectShape<T>;
+};

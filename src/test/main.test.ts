@@ -178,6 +178,28 @@ describe('Any of', () => {
     });
 });
 
+describe('Intersect', () => {
+    const validate = validator.intersect(
+        validator.object({ foo: validator.number() }),
+        validator.object({ bar: validator.string() }),
+    );
+
+    test('Valid', () => {
+        expectValid(validate, { foo: 1, bar: '' });
+    });
+
+    test('Invalid', () => {
+        expectInvalid(
+            validate,
+            {},
+            [
+                '[root.foo] should be a number',
+                '[root.bar] should be a string',
+            ].join('\n'),
+        );
+    });
+});
+
 describe('Literal', () => {
     const validate = validator.literal('test', 1, 2);
 

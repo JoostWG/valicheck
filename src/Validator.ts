@@ -105,6 +105,34 @@ export class Validator {
         };
     }
 
+    public map<K, V>(
+        keyValidator: ValidatorFunc<K>,
+        valueValidator: ValidatorFunc<V>,
+    ): ValidatorFunc<Map<K, V>> {
+        return (value, path) => {
+            const validator = this.array(this.tuple([keyValidator, valueValidator]));
+
+            return new Map(validator(value, path));
+        };
+    }
+
+    public objectMap<K extends string, V>(
+        keyValidator: ValidatorFunc<K>,
+        valueValidator: ValidatorFunc<V>,
+    ): ValidatorFunc<Map<K, V>> {
+        return (value, path) => {
+            if (typeof value !== 'object' || !value || Array.isArray(value)) {
+                throw new ValidationError(`[${path}] should be an object`);
+            }
+
+            return new Map(
+                Object.entries(value).map((
+                    [key, v],
+                ) => [keyValidator(key, `keyof ${path}`), valueValidator(v, `${path}.${key}`)]),
+            );
+        };
+    }
+
     public literal<const T extends unknown[]>(...literals: T): ValidatorFunc<T[number]> {
         return (value, path) => {
             for (const x of literals) {

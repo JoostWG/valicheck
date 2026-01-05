@@ -134,6 +134,36 @@ describe('Tuple', () => {
     });
 });
 
+describe('Map', () => {
+    const validate = validator.map(validator.literal('test'), validator.literal(1, 2, 3));
+
+    test('Valid', () => {
+        expectValid(validate, [['test', 1]], new Map([['test', 1]]));
+        expectValid(validate, [['test', 1], ['test', 2]], new Map([['test', 1], ['test', 2]]));
+    });
+
+    test('Invalid', () => {
+        expectInvalid(validate, { test: 1 }, '[root] should be an array');
+        expectInvalid(validate, [['test', 4]], '[root[0][1]] must be one of [1,2,3], got 4');
+        expectInvalid(validate, [[[], 3]], '[root[0][0]] must be one of [test], got []');
+    });
+});
+
+describe('Object map', () => {
+    const validate = validator.objectMap(validator.literal('test'), validator.literal(1, 2, 3));
+
+    test('Valid', () => {
+        expectValid(validate, { test: 1 }, new Map([['test', 1]]));
+    });
+
+    test('Invalid', () => {
+        expectInvalid(validate, { test: 4 }, '[root.test] must be one of [1,2,3], got 4');
+        expectInvalid(validate, { nope: 4 }, '[keyof root] must be one of [test], got "nope"');
+        expectInvalid(validate, [['test', 4]], '[root] should be an object');
+        expectInvalid(validate, [[[], 3]], '[root] should be an object');
+    });
+});
+
 describe('Any of', () => {
     const validate = validator.anyOf([validator.string(), validator.boolean()]);
 

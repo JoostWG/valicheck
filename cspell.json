@@ -1,0 +1,11 @@
+{
+    "language": "en",
+    "files": [
+        "**"
+    ],
+    "ignorePaths": [
+        "tsconfig.tsbuildinfo",
+        "cache/**"
+    ],
+    "words": ["eslintcache", "Joost", "valicheck"]
+}

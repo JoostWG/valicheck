@@ -51,3 +51,14 @@ jobs:
 
       - name: Run Jest
         run: npx jest
+
+  cspell:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Run CSpell
+        uses: streetsidesoftware/cspell-action@v8

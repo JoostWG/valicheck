@@ -28,5 +28,4 @@
         ".eslintcache": true,
         "docs-build/**": true
     },
-    "cSpell.words": ["eslintcache", "Joost", "valicheck"]
 }

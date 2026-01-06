@@ -6,8 +6,6 @@ on:
       - src/**
       - .github/workflows/quality.yml
 
-
-
 jobs:
   eslint:
     runs-on: ubuntu-latest
@@ -15,10 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-
-      - name: Install dependencies
-        run: npm ci
+      - uses: JoostWG/actions/npm@master
 
       - name: Run ESLint
         run: npx eslint .
@@ -29,10 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-
-      - name: Install dependencies
-        run: npm ci
+      - uses: JoostWG/actions/npm@master
 
       - name: Run dprint
         run: npx dprint check
@@ -43,10 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-
-      - name: Install dependencies
-        run: npm ci
+      - uses: JoostWG/actions/npm@master
 
       - name: Run TypeScript
         run: npx tsc --noEmit
@@ -58,10 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-
-      - name: Install dependencies
-        run: npm ci
+      - uses: JoostWG/actions/npm@master
 
       - name: Run Jest
         run: npx jest

@@ -32,5 +32,5 @@
         "spell-check": "cspell",
         "quality": "concurrently -n ESLint,dprint,TypeScript,Jest,CSpell -c #3178C6,#4D5564,#4B32C3,#15C213,#B51A00 \"npm run lint\" \"npm run format\" \"npm run type-check\" \"npm test\" \"npm run spell-check -- --silent\" "
     },
-    "version": "0.1.0"
+    "version": "0.1.1"
 }

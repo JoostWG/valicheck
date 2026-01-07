@@ -158,11 +158,13 @@ export function literal<const T extends unknown[]>(...literals: T): ValidatorFun
     };
 }
 
-export function anyOf<T extends ValidatorFunc>(validators: T[]): ValidatorFunc<ValidatorType<T>> {
+export function anyOf<T extends ValidatorFunc[]>(
+    ...validators: T
+): ValidatorFunc<ValidatorType<T[number]>> {
     return (value, path) => {
         for (const validate of validators) {
             try {
-                return validate(value, path) as ValidatorType<T>;
+                return validate(value, path) as ValidatorType<T[number]>;
             } catch (error) {
                 if (!(error instanceof ValidationError)) {
                     throw error;

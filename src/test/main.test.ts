@@ -163,7 +163,7 @@ describe('Object map', () => {
 });
 
 describe('Any of', () => {
-    const validate = v.anyOf([v.string(), v.boolean()]);
+    const validate = v.anyOf(v.string(), v.boolean());
 
     test('Valid', () => {
         expectValid(validate, 'sa');

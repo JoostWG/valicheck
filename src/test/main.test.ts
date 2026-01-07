@@ -1,10 +1,8 @@
-import { Validator } from '../Validator';
+import { v } from '..';
 import { expectInvalid, expectValid } from './helpers';
 
-const validator = new Validator();
-
 describe('String', () => {
-    const validate = validator.string();
+    const validate = v.string();
 
     test('Valid', () => {
         expectValid(validate, 'sa');
@@ -14,7 +12,7 @@ describe('String', () => {
         expectInvalid(validate, 2, '[root] should be a string');
     });
 
-    const validateWithPattern = validator.string({ pattern: /^\d{4}$/u });
+    const validateWithPattern = v.string({ pattern: /^\d{4}$/u });
 
     test('Valid pattern', () => {
         expectValid(validateWithPattern, '1234');
@@ -26,7 +24,7 @@ describe('String', () => {
 });
 
 describe('Number', () => {
-    const validate = validator.number();
+    const validate = v.number();
 
     test('Valid', () => {
         expectValid(validate, 1);
@@ -41,7 +39,7 @@ describe('Number', () => {
         expectInvalid(validate, 'test', '[root] should be a number');
     });
 
-    const validateWithNaN = validator.number({ allowNaN: true });
+    const validateWithNaN = v.number({ allowNaN: true });
 
     test('Valid NaN', () => {
         expectValid(validateWithNaN, 1);
@@ -50,7 +48,7 @@ describe('Number', () => {
 });
 
 describe('Boolean', () => {
-    const validate = validator.boolean();
+    const validate = v.boolean();
 
     test('Valid', () => {
         expectValid(validate, true);
@@ -62,7 +60,7 @@ describe('Boolean', () => {
         expectInvalid(validate, 0, '[root] should be a boolean');
     });
 
-    const validateWithConvert = validator.boolean({
+    const validateWithConvert = v.boolean({
         convertToTrue: ['yes', 1],
         convertToFalse: ['no', 0],
     });
@@ -86,7 +84,7 @@ describe('Boolean', () => {
 });
 
 describe('Array', () => {
-    const validate = validator.array(validator.string());
+    const validate = v.array(v.string());
 
     test('Valid', () => {
         expectValid(validate, ['a', 'b', 'c']);
@@ -99,9 +97,9 @@ describe('Array', () => {
 });
 
 describe('Object', () => {
-    const validate = validator.object({
-        foo: validator.optional(validator.string()),
-        bar: validator.nullable(validator.number()),
+    const validate = v.object({
+        foo: v.optional(v.string()),
+        bar: v.nullable(v.number()),
     });
 
     test('Valid', () => {
@@ -121,7 +119,7 @@ describe('Object', () => {
 });
 
 describe('Tuple', () => {
-    const validate = validator.tuple([validator.string(), validator.literal(1, 2, 3)]);
+    const validate = v.tuple([v.string(), v.literal(1, 2, 3)]);
 
     test('Valid', () => {
         expectValid(validate, ['test', 1]);
@@ -135,7 +133,7 @@ describe('Tuple', () => {
 });
 
 describe('Map', () => {
-    const validate = validator.map(validator.literal('test'), validator.literal(1, 2, 3));
+    const validate = v.map(v.literal('test'), v.literal(1, 2, 3));
 
     test('Valid', () => {
         expectValid(validate, [['test', 1]], new Map([['test', 1]]));
@@ -150,7 +148,7 @@ describe('Map', () => {
 });
 
 describe('Object map', () => {
-    const validate = validator.objectMap(validator.literal('test'), validator.literal(1, 2, 3));
+    const validate = v.objectMap(v.literal('test'), v.literal(1, 2, 3));
 
     test('Valid', () => {
         expectValid(validate, { test: 1 }, new Map([['test', 1]]));
@@ -165,7 +163,7 @@ describe('Object map', () => {
 });
 
 describe('Any of', () => {
-    const validate = validator.anyOf([validator.string(), validator.boolean()]);
+    const validate = v.anyOf([v.string(), v.boolean()]);
 
     test('Valid', () => {
         expectValid(validate, 'sa');
@@ -179,9 +177,9 @@ describe('Any of', () => {
 });
 
 describe('Intersect', () => {
-    const validate = validator.intersect(
-        validator.object({ foo: validator.number() }),
-        validator.object({ bar: validator.string() }),
+    const validate = v.intersect(
+        v.object({ foo: v.number() }),
+        v.object({ bar: v.string() }),
     );
 
     test('Valid', () => {
@@ -201,7 +199,7 @@ describe('Intersect', () => {
 });
 
 describe('Literal', () => {
-    const validate = validator.literal('test', 1, 2);
+    const validate = v.literal('test', 1, 2);
 
     test('Valid', () => {
         expectValid(validate, 'test');
@@ -216,7 +214,7 @@ describe('Literal', () => {
 });
 
 describe('Enum', () => {
-    const validateUsingObject = validator.enum({ test: 1, cool: 2 });
+    const validateUsingObject = v.enumValue({ test: 1, cool: 2 });
 
     test('Valid using object', () => {
         expectValid(validateUsingObject, 1);
@@ -234,7 +232,7 @@ describe('Enum', () => {
         Cool = 2,
     }
 
-    const validateUsingNumberEnum = validator.enum(TestNumberEnum);
+    const validateUsingNumberEnum = v.enumValue(TestNumberEnum);
 
     test('Valid using number enum', () => {
         expectValid(validateUsingNumberEnum, 1);
@@ -254,7 +252,7 @@ describe('Enum', () => {
         Cool = '2',
     }
 
-    const validateUsingStringEnum = validator.enum(TestStringEnum);
+    const validateUsingStringEnum = v.enumValue(TestStringEnum);
 
     test('Valid using string enum', () => {
         expectValid(validateUsingStringEnum, '1');
@@ -270,7 +268,7 @@ describe('Enum', () => {
 });
 
 describe('Nullable', () => {
-    const validate = validator.nullable(validator.string());
+    const validate = v.nullable(v.string());
 
     test('Valid', () => {
         expectValid(validate, 'test');
@@ -284,7 +282,7 @@ describe('Nullable', () => {
 });
 
 describe('Optional', () => {
-    const validate = validator.optional(validator.string());
+    const validate = v.optional(v.string());
 
     test('Valid', () => {
         expectValid(validate, 'test');
@@ -298,7 +296,7 @@ describe('Optional', () => {
 });
 
 describe('Unknown', () => {
-    const validate = validator.unknown();
+    const validate = v.unknown();
 
     test('Valid', () => {
         expectValid(validate, 'test');

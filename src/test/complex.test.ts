@@ -1,15 +1,13 @@
-import { Validator } from '../Validator';
+import { v } from '..';
 import { expectInvalid, expectValid } from './helpers';
 
-const validator = new Validator();
-
 describe('Complex 1', () => {
-    const validate = validator.object({
-        name: validator.string(),
-        version: validator.optional(validator.string({ pattern: /^\d+\.\d+\.\d+$/u })),
-        repository: validator.object({
-            type: validator.literal('git'),
-            url: validator.string(),
+    const validate = v.object({
+        name: v.string(),
+        version: v.optional(v.string({ pattern: /^\d+\.\d+\.\d+$/u })),
+        repository: v.object({
+            type: v.literal('git'),
+            url: v.string(),
         }),
     });
 

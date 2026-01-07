@@ -1,3 +1,4 @@
+import { v } from '.';
 import type {
     ObjectShape,
     ObjectValidatorFunc,
@@ -5,219 +6,125 @@ import type {
     ValidatorFunc,
     ValidatorType,
 } from './types';
-import { ValidationError } from './ValidationError';
 
+/**
+ * @deprecated
+ */
 export class Validator {
+    /**
+     * @deprecated
+     */
     public string({ pattern }: { pattern?: RegExp } = {}): ValidatorFunc<string> {
-        return (value, path) => {
-            if (typeof value !== 'string') {
-                throw new ValidationError(`[${path}] should be a string`);
-            }
-
-            if (pattern && !pattern.test(value)) {
-                throw new ValidationError(`[${path}] doesn't match the pattern`);
-            }
-
-            return value;
-        };
+        return v.string({ pattern });
     }
 
     public number(options?: { allowNaN: boolean }): ValidatorFunc<number> {
-        return (value, path) => {
-            if (typeof value !== 'number' || !options?.allowNaN && Number.isNaN(value)) {
-                throw new ValidationError(`[${path}] should be a number`);
-            }
-
-            return value;
-        };
+        return v.number(options);
     }
 
+    /**
+     * @deprecated
+     */
     public boolean(
         options?: { convertToTrue?: unknown[]; convertToFalse?: unknown[] },
     ): ValidatorFunc<boolean> {
-        return (value, path) => {
-            if (typeof value === 'boolean') {
-                return value;
-            }
-
-            if (options?.convertToTrue?.includes(value)) {
-                return true;
-            }
-
-            if (options?.convertToFalse?.includes(value)) {
-                return false;
-            }
-
-            throw new ValidationError(`[${path}] should be a boolean`);
-        };
+        return v.boolean(options);
     }
 
+    /**
+     * @deprecated
+     */
     public array<T>(validator: ValidatorFunc<T>): ValidatorFunc<T[]> {
-        return (value, path) => {
-            if (!Array.isArray(value)) {
-                throw new ValidationError(`[${path}] should be an array`);
-            }
-
-            return value.map((item, index) => validator(item, `${path}[${index}]`));
-        };
+        return v.array(validator);
     }
 
+    /**
+     * @deprecated
+     */
     public object<T extends Record<string, unknown>>(
         shape: ObjectShape<T>,
     ): ObjectValidatorFunc<T> {
-        function validate(value: unknown, path: string): T {
-            if (typeof value !== 'object' || !value || Array.isArray(value)) {
-                throw new ValidationError(`[${path}] should be an object`);
-            }
-
-            const result: Record<string, unknown> = {};
-            const errors: ValidationError[] = [];
-
-            for (const [key, validator] of Object.entries(shape)) {
-                try {
-                    result[key] = validator(
-                        // @ts-expect-error Not something for now
-                        value[key],
-                        `${path}.${key}`,
-                    );
-                } catch (error) {
-                    if (!(error instanceof ValidationError)) {
-                        throw error;
-                    }
-
-                    errors.push(error);
-                }
-            }
-
-            if (errors.length > 0) {
-                throw new ValidationError(errors.map((error) => error.message).join('\n'));
-            }
-
-            return result as T;
-        }
-
-        validate.shape = shape;
-
-        return validate;
+        return v.object(shape);
     }
 
+    /**
+     * @deprecated
+     */
     public tuple<const T extends ValidatorFunc[]>(shape: T): ValidatorFunc<ShapeType<T>> {
-        return (value, path): ShapeType<T> => {
-            if (!Array.isArray(value)) {
-                throw new ValidationError(`[${path}] should be an array`);
-            }
-
-            if (value.length !== shape.length) {
-                throw new ValidationError(`[${path}] should have a length of ${shape.length}`);
-            }
-
-            return value.map((item, index) => shape[index](item, `${path}[${index}]`)) as ShapeType<
-                T
-            >;
-        };
+        return v.tuple(shape);
     }
 
+    /**
+     * @deprecated
+     */
     public map<K, V>(
         keyValidator: ValidatorFunc<K>,
         valueValidator: ValidatorFunc<V>,
     ): ValidatorFunc<Map<K, V>> {
-        return (value, path) => {
-            const validator = this.array(this.tuple([keyValidator, valueValidator]));
-
-            return new Map(validator(value, path));
-        };
+        return v.map(keyValidator, valueValidator);
     }
 
+    /**
+     * @deprecated
+     */
     public objectMap<K extends string, V>(
         keyValidator: ValidatorFunc<K>,
         valueValidator: ValidatorFunc<V>,
     ): ValidatorFunc<Map<K, V>> {
-        return (value, path) => {
-            if (typeof value !== 'object' || !value || Array.isArray(value)) {
-                throw new ValidationError(`[${path}] should be an object`);
-            }
-
-            return new Map(
-                Object.entries(value).map((
-                    [key, v],
-                ) => [keyValidator(key, `keyof ${path}`), valueValidator(v, `${path}.${key}`)]),
-            );
-        };
+        return v.objectMap(keyValidator, valueValidator);
     }
 
+    /**
+     * @deprecated
+     */
     public literal<const T extends unknown[]>(...literals: T): ValidatorFunc<T[number]> {
-        return (value, path) => {
-            for (const x of literals) {
-                if (x === value) {
-                    return value;
-                }
-            }
-
-            throw new ValidationError(
-                `[${path}] must be one of [${literals.toString()}], got ${JSON.stringify(value)}`,
-            );
-        };
+        return v.literal(...literals);
     }
 
+    /**
+     * @deprecated
+     */
     public anyOf<T extends ValidatorFunc>(validators: T[]): ValidatorFunc<ValidatorType<T>> {
-        return (value, path) => {
-            for (const validate of validators) {
-                try {
-                    return validate(value, path) as ValidatorType<T>;
-                } catch (error) {
-                    if (!(error instanceof ValidationError)) {
-                        throw error;
-                    }
-                }
-            }
-
-            throw new ValidationError(`[${path}] did not match any of the given validators`);
-        };
+        return v.anyOf(validators);
     }
 
+    /**
+     * @deprecated
+     */
     public intersect<T1 extends Record<string, unknown>, T2 extends Record<string, unknown>>(
         first: { shape: ObjectShape<T1> },
         second: { shape: ObjectShape<T2> },
     ): ObjectValidatorFunc<T1 & T2> {
-        return this.object({ ...first.shape, ...second.shape } as ObjectShape<T1 & T2>);
+        return v.intersect(first, second);
     }
 
+    /**
+     * @deprecated
+     */
     public enum<const T extends Record<string, string | number>>(
         enumClass: T,
     ): ValidatorFunc<Exclude<T[keyof T], keyof T>> {
-        const values = Object.values(enumClass)
-            .filter((value) => typeof value !== 'string' || !(value in enumClass));
-
-        return this.literal(...values as Exclude<T[keyof T], keyof T>[]);
+        return v.enumValue(enumClass);
     }
 
+    /**
+     * @deprecated
+     */
     public nullable<T>(validator: ValidatorFunc<T>): ValidatorFunc<T | null> {
-        return (value, path) => {
-            if (value === null) {
-                return null;
-            }
-
-            return validator(value, path);
-        };
+        return v.nullable(validator);
     }
 
+    /**
+     * @deprecated
+     */
     public optional<T>(validator: ValidatorFunc<T>): ValidatorFunc<T | undefined> {
-        return (value, path) => {
-            if (value === undefined) {
-                return undefined;
-            }
-
-            return validator(value, path);
-        };
+        return v.optional(validator);
     }
 
+    /**
+     * @deprecated
+     */
     public unknown(): ValidatorFunc {
-        return (value, path) => {
-            if (value === undefined) {
-                throw new ValidationError(`[${path}] cannot be undefined`);
-            }
-
-            return value;
-        };
+        return v.unknown();
     }
 }

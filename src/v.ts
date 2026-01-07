@@ -32,18 +32,18 @@ export function number(options: { allowNaN?: boolean } = {}): ValidatorFunc<numb
 }
 
 export function boolean(
-    options?: { convertToTrue?: unknown[]; convertToFalse?: unknown[] },
+    options: { convertToTrue?: unknown[]; convertToFalse?: unknown[] } = {},
 ): ValidatorFunc<boolean> {
     return (value, path) => {
         if (typeof value === 'boolean') {
             return value;
         }
 
-        if (options?.convertToTrue?.includes(value)) {
+        if (options.convertToTrue?.includes(value)) {
             return true;
         }
 
-        if (options?.convertToFalse?.includes(value)) {
+        if (options.convertToFalse?.includes(value)) {
             return false;
         }
 

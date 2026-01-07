@@ -1,11 +1,33 @@
 {
     "name": "valicheck",
+    "description": "A simple typed validation package",
+    "version": "0.1.7",
     "main": "dist/index.js",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/JoostWG/valicheck.git"
     },
+    "bugs": {
+        "url": "https://github.com/JoostWG/valicheck/issues"
+    },
+    "author": {
+        "name": "JoostWG",
+        "url": "https://github.com/JoostWG"
+    },
+    "keywords": [
+        "validate",
+        "validation"
+    ],
     "license": "MIT",
+    "scripts": {
+        "test": "jest",
+        "build": "tsup ./src --dts --clean --minify --minify-whitespace --minify-identifiers --minify-syntax",
+        "lint": "eslint . --fix --cache",
+        "format": "dprint fmt",
+        "type-check": "tsc --noEmit",
+        "spell-check": "cspell",
+        "quality": "concurrently -n ESLint,dprint,TypeScript,Jest,CSpell -c #3178C6,#4D5564,#4B32C3,#15C213,#B51A00 \"npm run lint\" \"npm run format\" \"npm run type-check\" \"npm test\" \"npm run spell-check -- --silent\" "
+    },
     "devDependencies": {
         "@eslint/js": "^9.39.2",
         "@stylistic/eslint-plugin": "^5.6.1",
@@ -22,15 +44,5 @@
         "tsup": "^8.5.1",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.51.0"
-    },
-    "scripts": {
-        "test": "jest",
-        "build": "tsup ./src --dts --clean --minify --minify-whitespace --minify-identifiers --minify-syntax",
-        "lint": "eslint . --fix --cache",
-        "format": "dprint fmt",
-        "type-check": "tsc --noEmit",
-        "spell-check": "cspell",
-        "quality": "concurrently -n ESLint,dprint,TypeScript,Jest,CSpell -c #3178C6,#4D5564,#4B32C3,#15C213,#B51A00 \"npm run lint\" \"npm run format\" \"npm run type-check\" \"npm test\" \"npm run spell-check -- --silent\" "
-    },
-    "version": "0.1.7"
+    }
 }

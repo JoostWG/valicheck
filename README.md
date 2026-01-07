@@ -6,5 +6,5 @@
 ## Installation
 
 ```
-npm install github:JoostWG/valicheck#build
+npm install valicheck
 ```

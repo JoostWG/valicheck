@@ -1,4 +1,4 @@
 export type * from './types';
+export * as v from './v';
 export * from './ValidationError';
 export * from './Validator';
-export * as v from './validators';

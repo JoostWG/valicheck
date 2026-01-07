@@ -1,23 +1,25 @@
 name: Publish
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - src/**
-      - package.json
-      - package-lock.json
-      - tsconfig.json
-      - .github/workflows/**
-#   release:
-#     types:
-#       - released
+  release:
+    types:
+      - released
 
 jobs:
   quality:
     uses: ./.github/workflows/quality.yml
 
-  build:
-    uses: ./.github/workflows/build.yml
+  publish:
+    runs-on: ubuntu-latest
     needs: quality
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test
+      - run: npm publish

@@ -24,6 +24,7 @@
         "typescript-eslint": "^8.51.0"
     },
     "scripts": {
+        "prepublish": "npm run build",
         "test": "jest",
         "build": "tsup ./src --dts --clean --minify --minify-whitespace --minify-identifiers --minify-syntax",
         "lint": "eslint . --fix --cache",

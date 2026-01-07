@@ -21,9 +21,9 @@ export function string({ pattern }: { pattern?: RegExp } = {}): ValidatorFunc<st
     };
 }
 
-export function number(options?: { allowNaN: boolean }): ValidatorFunc<number> {
+export function number(options: { allowNaN?: boolean } = {}): ValidatorFunc<number> {
     return (value, path) => {
-        if (typeof value !== 'number' || !options?.allowNaN && Number.isNaN(value)) {
+        if (typeof value !== 'number' || !options.allowNaN && Number.isNaN(value)) {
             throw new ValidationError(`[${path}] should be a number`);
         }
 

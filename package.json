@@ -21,7 +21,7 @@
     "license": "MIT",
     "scripts": {
         "test": "jest",
-        "build": "tsup ./src --dts --clean --minify --minify-whitespace --minify-identifiers --minify-syntax",
+        "build": "tsup",
         "lint": "eslint . --fix --cache",
         "format": "dprint fmt",
         "type-check": "tsc --noEmit",

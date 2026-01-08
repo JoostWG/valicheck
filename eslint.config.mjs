@@ -9,6 +9,7 @@ export default defineConfig(
         'dist/*',
         'eslint.config.mjs',
         'jest.config.js',
+        'tsup.config.ts',
     ]),
     js.configs.all,
     tseslint.configs.all,

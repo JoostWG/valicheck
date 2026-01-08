@@ -1,5 +1,5 @@
+import { ValidationError } from '../errors';
 import type { ValidatorFunc } from '../types';
-import { ValidationError } from '../ValidationError';
 
 export function expectValid(validate: ValidatorFunc, value: unknown, expected?: unknown): void {
     expect(validate(value, 'root')).toEqual(expected ?? value);

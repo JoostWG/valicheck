@@ -1,3 +1,4 @@
+import { ValidationError } from './errors';
 import type {
     ObjectShape,
     ObjectValidatorFunc,
@@ -5,7 +6,6 @@ import type {
     ValidatorFunc,
     ValidatorType,
 } from './types';
-import { ValidationError } from './ValidationError';
 
 export function string({ pattern }: { pattern?: RegExp } = {}): ValidatorFunc<string> {
     return (value, path) => {

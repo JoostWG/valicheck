@@ -19,6 +19,13 @@
         "validation"
     ],
     "license": "MIT",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.js"
+        }
+    },
     "scripts": {
         "test": "jest",
         "build": "tsup",

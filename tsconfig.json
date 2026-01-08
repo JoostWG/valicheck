@@ -9,7 +9,8 @@
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": false,
-        "isolatedModules": true
+        "isolatedModules": true,
+        "noImplicitOverride": true
     },
     "include": ["src"]
 }
